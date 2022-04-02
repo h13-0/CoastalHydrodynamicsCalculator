@@ -2,6 +2,7 @@
 
 #include "QtWidgets/QMainWindow.h"
 #include "QtWidgets/QLineEdit.h"
+#include "QLineSeries"
 #include "ui_CalculatorWindow.h"
 #include <functional>
 #include <vector>
@@ -43,14 +44,21 @@ namespace h13
         /// <summary>
         /// 
         /// </summary>
-        /// <param name=""></param>
-        void ClearChart(void);
-
+        void SetChartTitle(std::string Title);
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="Series"></param>
-        void AddSeriesToChart(ChartSeries_t &Series);
+        void AddSeriesToChart(ChartSeries_t& Series);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        void ClearChart(void);
+
+
 
         /// <summary>
         /// 
@@ -58,22 +66,32 @@ namespace h13
         /// <param name="Result"></param>
         void SetDispersionEquationCalculatorResult(double Result);
 
+        void SetEllipticCosineWaveErgodicCalculatorKappaResult(double Result);
+
+        void SetEllipticCosineWaveErgodicCalculatorWaveLengthResult(double Result);
+
     private:
         bool tryParseDouble(QLineEdit* LineEdit, double &Value);
         bool tryParseInt(QLineEdit* LineEdit, int &Value);
 
         Ui::CalculatorWindow ui;
         QChart chart;
+        std::vector<QLineSeries*> seriesList;
         /* data */
 
     private slots:
+        //void praseDouble(QLineEdit* LineEdit, double& Value);
+
         /// <summary>
         /// Run the dispersion equation calculator.
         /// </summary>
         void runDispersionEquationCalculator();
 
-        //void praseDouble(QLineEdit* LineEdit, double& Value);
-    
+        /// <summary>
+        /// Run the Elliptic cosine wave ergodic calculator.
+        /// </summary>
+        void runEllipticCosineWaveErgodicCalculator();
+        
 
 
     };

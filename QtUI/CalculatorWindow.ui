@@ -28,7 +28,7 @@
 background-color: #F4F4F4;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -56,7 +56,7 @@ background-color: #F4F4F4;</string>
         <rect>
          <x>20</x>
          <y>170</y>
-         <width>81</width>
+         <width>76</width>
          <height>24</height>
         </rect>
        </property>
@@ -74,7 +74,7 @@ background-color: #F4F4F4;</string>
         <rect>
          <x>20</x>
          <y>20</y>
-         <width>81</width>
+         <width>76</width>
          <height>24</height>
         </rect>
        </property>
@@ -92,7 +92,7 @@ background-color: #F4F4F4;</string>
         <rect>
          <x>20</x>
          <y>50</y>
-         <width>81</width>
+         <width>76</width>
          <height>24</height>
         </rect>
        </property>
@@ -123,7 +123,7 @@ background-color: #F4F4F4;</string>
         <rect>
          <x>20</x>
          <y>80</y>
-         <width>81</width>
+         <width>76</width>
          <height>24</height>
         </rect>
        </property>
@@ -141,7 +141,7 @@ background-color: #F4F4F4;</string>
         <rect>
          <x>20</x>
          <y>140</y>
-         <width>81</width>
+         <width>76</width>
          <height>24</height>
         </rect>
        </property>
@@ -159,7 +159,7 @@ background-color: #F4F4F4;</string>
         <rect>
          <x>20</x>
          <y>110</y>
-         <width>81</width>
+         <width>76</width>
          <height>24</height>
         </rect>
        </property>
@@ -311,253 +311,6 @@ background-color: #F4F4F4;</string>
      <attribute name="title">
       <string>椭圆余弦波波长计算</string>
      </attribute>
-     <widget class="QGroupBox" name="EllipticCosineWaveErgodicCalculator">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>370</width>
-        <height>205</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:15px;
-background-color: #F4F4F4;</string>
-      </property>
-      <property name="title">
-       <string>椭圆余弦波波长遍历计算</string>
-      </property>
-      <widget class="QTextEdit" name="textEdit_4">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>170</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:3px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_19">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>170</y>
-         <width>81</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:0px solid rgb(100,100,100);
-border-radius:0px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="text">
-        <string>迭代次数上限</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_20">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>81</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:0px solid rgb(100,100,100);
-border-radius:0px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="text">
-        <string>波周期</string>
-       </property>
-      </widget>
-      <widget class="QTextEdit" name="Cycle_2">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>20</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:3px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_21">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>50</y>
-         <width>81</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:0px solid rgb(100,100,100);
-border-radius:0px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="text">
-        <string>水深</string>
-       </property>
-      </widget>
-      <widget class="QTextEdit" name="Depth_2">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>50</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:3px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="Start_2">
-       <property name="geometry">
-        <rect>
-         <x>275</x>
-         <y>20</y>
-         <width>80</width>
-         <height>175</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>计算</string>
-       </property>
-      </widget>
-      <widget class="QTextEdit" name="InitialWavelength_2">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>80</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:3px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_22">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>80</y>
-         <width>81</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:0px solid rgb(100,100,100);
-border-radius:0px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="text">
-        <string>初始波长</string>
-       </property>
-      </widget>
-      <widget class="QTextEdit" name="textEdit_8">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>140</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:3px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_23">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>140</y>
-         <width>81</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:0px solid rgb(100,100,100);
-border-radius:0px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="text">
-        <string>目标迭代精度</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_24">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>110</y>
-         <width>81</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:0px solid rgb(100,100,100);
-border-radius:0px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="text">
-        <string>输出</string>
-       </property>
-      </widget>
-      <widget class="QTextEdit" name="Output_4">
-       <property name="geometry">
-        <rect>
-         <x>100</x>
-         <y>110</y>
-         <width>161</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:3px;
-background-color: #F4F4F4;</string>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="DispersionEquationCalculator_5">
       <property name="geometry">
        <rect>
@@ -805,6 +558,255 @@ background-color: #F4F4F4;</string>
        </property>
       </widget>
      </widget>
+     <widget class="QGroupBox" name="EllipticCosineWaveErgodicCalculator">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>370</width>
+        <height>206</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:15px;
+background-color: #F4F4F4;</string>
+      </property>
+      <property name="title">
+       <string>椭圆余弦波波长遍历计算</string>
+      </property>
+      <widget class="QLabel" name="label_19">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>140</y>
+         <width>76</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:0px solid rgb(100,100,100);
+border-radius:0px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>κ输出</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_20">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>76</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:0px solid rgb(100,100,100);
+border-radius:0px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>波周期</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_21">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>76</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:0px solid rgb(100,100,100);
+border-radius:0px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>水深</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="ECWE_Calc">
+       <property name="geometry">
+        <rect>
+         <x>275</x>
+         <y>20</y>
+         <width>80</width>
+         <height>175</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>计算</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_22">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>80</y>
+         <width>76</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:0px solid rgb(100,100,100);
+border-radius:0px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>波高</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_23">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>170</y>
+         <width>76</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:0px solid rgb(100,100,100);
+border-radius:0px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>遍历精度</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_24">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>110</y>
+         <width>76</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:0px solid rgb(100,100,100);
+border-radius:0px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>波长输出</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ECWE_Cycle">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>20</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:3px;
+background-color: #F4F4F4;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ECWE_Depth">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>50</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:3px;
+background-color: #F4F4F4;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ECWE_WaveHeight">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>80</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:3px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="readOnly">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ECWE_WaveLengthOutput">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>110</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:3px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ECWE_ErgodicAccuracy">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>170</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:3px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string>0.001</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ECWE_KappaOutput">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>140</y>
+         <width>161</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:3px;
+background-color: #F4F4F4;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>页</string>
+     </attribute>
     </widget>
    </widget>
    <widget class="QChartView" name="WaveView">

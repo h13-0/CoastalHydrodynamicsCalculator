@@ -1,6 +1,6 @@
 #include "EllipticCosineWaveWavelengthCalculator.hpp"
 
-double CalculateEllipticCosineWaveWavelength(double )
+double EllipticCosineWaveWavelengthCalcForward(double )
 {
 
 

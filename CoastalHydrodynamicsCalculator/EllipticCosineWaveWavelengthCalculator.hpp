@@ -1,3 +1,3 @@
 #pragma once
 
-double EllipticCosineWaveWavelengthCalculate();
+double EllipticCosineWaveWavelengthCalcForward();
