@@ -22,6 +22,7 @@ include_directories(
 )
 
 # Add source files.
+aux_source_directory("${PROJECT_SOURCE_DIR}/CoastalHydrodynamicsCalculator" SOURCE_FILES)
 aux_source_directory("${PROJECT_SOURCE_DIR}/QtUI" SOURCE_FILES)
 set(
 	SOURCE_FILES

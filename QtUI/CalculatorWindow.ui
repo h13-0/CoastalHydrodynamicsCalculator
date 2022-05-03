@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>521</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
 background-color: #F4F4F4;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -272,37 +272,6 @@ background-color: #F4F4F4;</string>
        </property>
        <property name="text">
         <string>1000</string>
-       </property>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>230</y>
-        <width>371</width>
-        <height>206</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px solid rgb(100,100,100);
-border-radius:15px;
-background-color: #F4F4F4;</string>
-      </property>
-      <property name="title">
-       <string>项目信息</string>
-      </property>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>131</width>
-         <height>131</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
        </property>
       </widget>
      </widget>
@@ -696,7 +665,7 @@ background-color: #F4F4F4;</string>
         <string>波长输出</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="ECWE_Cycle">
+      <widget class="QLineEdit" name="ECWE_WavePeriod">
        <property name="geometry">
         <rect>
          <x>100</x>
@@ -823,6 +792,42 @@ background-color: #F4F4F4;</string>
 border-radius:15px;
 background-color: #F4F4F4;</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>491</y>
+      <width>1051</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:15px;
+background-color: #F4F4F4;</string>
+    </property>
+    <property name="title">
+     <string>日志区</string>
+    </property>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>1031</width>
+       <height>116</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border:2px solid rgb(100,100,100);
+border-radius:15px;
+background-color: #FEFEFE;</string>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

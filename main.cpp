@@ -3,9 +3,6 @@
 #include <QApplication>
 #include <MainWindow.hpp>
 
-#include "EllipticCosineWaveWavelengthCalculator.hpp"
-
-
 int main(int argc, char** argv)
 {
     using namespace h13;

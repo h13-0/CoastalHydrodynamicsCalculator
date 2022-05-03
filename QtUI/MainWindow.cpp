@@ -7,6 +7,13 @@
 #include <string>
 #include <iostream>
 
+// Dispersion Equation Wavelength Calculator.
+#include "DispersionEquationWavelengthCalculator.hpp"
+
+// Elliptic Cosine Wave Wavelength Calculator.
+#include "EllipticIntegral.hpp"
+//#include "EllipticCosineWaveWavelengthCalculator.hpp"
+
 using namespace h13;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -159,7 +166,7 @@ void MainWindow::runDispersionEquationCalculator()
     
     // Create calculate thread.
     std::thread(
-        [this](double CycleTime, double Depth, double InitialWavelength, double IterationAccuracy, int MaximumIterations) -> int
+        [this](double Period, double Depth, double InitialWavelength, double IterationAccuracy, int MaximumIterations) -> int
         {
             int iterations = 0;
             
@@ -172,7 +179,11 @@ void MainWindow::runDispersionEquationCalculator()
             while (iterations < MaximumIterations)
             {
                 lastWaveLength = waveLength;
-                waveLength = ((9.8 * pow(CycleTime, 2)) / (2 * M_PI)) * tanh((2 * M_PI / waveLength) * Depth);
+
+                // Calculate next iteration.
+                waveLength = DispersionEquationWavelengthCalcForward(Period, Depth, lastWaveLength);
+
+                // Add point to chart.
                 series.Points.push_back(Points(iterations + 1, waveLength));
 
                 if (fabs(waveLength - lastWaveLength) < IterationAccuracy)
@@ -196,9 +207,9 @@ void MainWindow::runDispersionEquationCalculator()
 void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
 {
     // Get Values from QTextEdit.
-    // cycle.
-    double cycle = 0.0;
-    if (!tryParseDouble(ui.ECWE_Cycle, cycle))
+    // period.
+    double period = 0.0;
+    if (!tryParseDouble(ui.ECWE_WavePeriod, period))
     {
         return;
     }
@@ -226,7 +237,7 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
 
     // Create calculate thread.
     std::thread(
-        [this](double Cycle, double Depth, double WaveHeight, double ErgodicAccuracy) -> int
+        [this](double Period, double Depth, double WaveHeight, double ErgodicAccuracy) -> int
         {
             // Create series.
             ChartSeries K_kappaSeries;
@@ -249,27 +260,12 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
 
             // Calculate K(κ) and E(κ).
             for(double kappa = ErgodicAccuracy; kappa < 1; kappa += ErgodicAccuracy)
-            {
-                // Calculate K(κ).
+            {                
+                // Calculate K(κ) and E(κ).
                 double K_kappa = 0.0;
-                int slices = 0;
-                for(double theta = ErgodicAccuracy; theta < M_PI_2; theta += ErgodicAccuracy)
-                {
-                    K_kappa += 1 / (sqrt(1 - pow(kappa, 2) * pow(sin(theta), 2)));
-                    slices ++;
-                }
-                K_kappa = K_kappa * M_PI_2 / slices;
-                K_kappaSeries.Points.push_back(Points(kappa, K_kappa));
-
-                // Calculate E(κ).
                 double E_kappa = 0.0;
-                slices = 0;
-                for(double theta = ErgodicAccuracy; theta < M_PI_2; theta += ErgodicAccuracy)
-                {
-                    E_kappa += sqrt(1 - pow(kappa, 2) * pow(sin(theta), 2));
-                    slices ++;
-                }
-                E_kappa = E_kappa * M_PI_2 / slices;
+                EllipticIntegralCalc(kappa, K_kappa, E_kappa);
+                K_kappaSeries.Points.push_back(Points(kappa, K_kappa));
                 E_kappaSeries.Points.push_back(Points(kappa, E_kappa));
 
                 // Calculate cycleTime.
@@ -281,20 +277,13 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
                 cycleTimeSeries.Points.push_back(Points(kappa, cycleTime));
 
                 // Find the best kappa.
-                if (fabs(cycleTime - Cycle) < fabs(betterCycleTime - Cycle))
+                if (fabs(cycleTime - Period) < fabs(betterCycleTime - Period))
                 {
                     resultKappa = kappa;
                     resultK_kappa = K_kappa;
                     resultE_kappa = E_kappa;
                     betterCycleTime = cycleTime;
                 }
-
-                // Test K(κ) and E(κ).
-                //if(fabs(kappa - 0.50) < 0.01)
-                //{
-                //    std::cout << "K_kappa: " << K_kappa << std::endl;
-                //    std::cout << "E_kappa: " << E_kappa << std::endl;
-                //}
             }
 
             // Calculate wavelength.
@@ -311,7 +300,7 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
             AddSeriesToChart(cycleTimeSeries);
 
             return 0;
-        }, cycle, depth, waveHeight, ergodicAccuracy
+        }, period, depth, waveHeight, ergodicAccuracy
     ).detach();
 }
 
