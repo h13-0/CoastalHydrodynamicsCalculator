@@ -34,4 +34,10 @@ set(
 
 # Compile executable file.
 add_executable(CoastalHydrodynamicsCalculator ${SOURCE_FILES})
-target_link_libraries(CoastalHydrodynamicsCalculator Qt6::Widgets Qt6::Core Qt6::Gui Qt6::Charts)
+target_link_libraries(
+	CoastalHydrodynamicsCalculator
+	Qt6::Widgets
+	Qt6::Core
+	Qt6::Gui
+	Qt6::Charts
+)

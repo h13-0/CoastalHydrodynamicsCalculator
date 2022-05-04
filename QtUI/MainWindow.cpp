@@ -56,10 +56,27 @@ MainWindow::MainWindow(QWidget *parent)
         [this](ChartSeries_t& Series)
         {
             QLineSeries* series = new QLineSeries();
-            for (auto& point : Series.Points)
+            // Only 1000 points are displayed.
+            if (Series.Points.size() <= 1000)
             {
-                series->append(point.X, point.Y);
+                for (auto& point : Series.Points)
+                {
+                    series->append(point.X, point.Y);
+                }
             }
+            else {
+                float samplingRate = Series.Points.size() / 1000.0;
+                int lastSamplingPoint = 0;
+                for (int index = 0; index < Series.Points.size(); index++)
+                {
+                    if (index - lastSamplingPoint >= samplingRate)
+                    {
+                        series->append(Series.Points[index].X, Series.Points[index].Y);
+                        lastSamplingPoint = index;
+                    }
+                }
+            }
+
             series->setName(QString::fromStdString(Series.Name));
             seriesList.push_back(series);
             chart.addSeries(series);
