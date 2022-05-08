@@ -92,7 +92,10 @@ namespace h13
         /// </summary>
         void runEllipticCosineWaveErgodicCalculator();
         
-
+        /// <summary>
+        /// Run the wave refraction calculator.
+        /// </summary>
+        void runWaveRefractionCalculator();
 
     };
 } // namespace h13

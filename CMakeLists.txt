@@ -12,13 +12,15 @@ find_package(Qt6 COMPONENTS Widgets Core Gui Charts REQUIRED)
 
 Qt6_WRAP_UI(UI_Files "${PROJECT_SOURCE_DIR}/QtUI/CalculatorWindow.ui")
 
+
 # Set header paths.
 include_directories(
 	${CMAKE_CURRENT_BINARY_DIR}
 	${Qt6Widgets_INCLUDE_DIRS}
 	"${PROJECT_SOURCE_DIR}/QtUI"
-	
+	"C:/Program Files/Polyspace/R2021a/extern/include"
 	"${PROJECT_SOURCE_DIR}/CoastalHydrodynamicsCalculator"
+	"${PROJECT_SOURCE_DIR}/CoastalHydrodynamicsCalculator/MATLAB"
 )
 
 # Add source files.
@@ -29,15 +31,25 @@ set(
 	${SOURCE_FILES}
 	"${PROJECT_SOURCE_DIR}/QtUI/CalculatorWindow.ui"
 	"${PROJECT_SOURCE_DIR}/main.cpp"
+	"${PROJECT_SOURCE_DIR}/CoastalHydrodynamicsCalculator/MATLAB/WaveRefractionCalc.cpp"
 )
 
-
 # Compile executable file.
+link_directories(
+	"C:/Program Files/Polyspace/R2021a/extern/lib/win64/microsoft"
+	"${PROJECT_SOURCE_DIR}/CoastalHydrodynamicsCalculator/MATLAB"
+)
 add_executable(CoastalHydrodynamicsCalculator ${SOURCE_FILES})
+
+
 target_link_libraries(
 	CoastalHydrodynamicsCalculator
 	Qt6::Widgets
 	Qt6::Core
 	Qt6::Gui
 	Qt6::Charts
+	mclmcrrt
+	libmx
+	libmat
+	mclmcr
 )

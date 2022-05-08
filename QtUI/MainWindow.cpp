@@ -13,9 +13,15 @@
 // Elliptic Cosine Wave Wavelength Calculator.
 #include "EllipticIntegral.hpp"
 //#include "EllipticCosineWaveWavelengthCalculator.hpp"
+#include "WaveRefractionCalc.h"
 
 using namespace h13;
-
+/*
+#pragma comment(lib, "mclmcrrt.lib")
+#pragma comment(lib, "libmx.lib")
+#pragma comment(lib, "libmat.lib")
+#pragma comment(lib, "mclmcr.lib")
+*/
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -26,6 +32,16 @@ MainWindow::MainWindow(QWidget *parent)
     
     ui.WaveView->setRenderHint(QPainter::Antialiasing);
 
+    // Init wave refraction calculator.
+    bool ret = WaveRefractionCalcInitialize();
+    if (ret)
+    {
+		std::cout << "WaveRefractionCalcInitialize() success." << std::endl;
+    }
+    else {
+		std::cout << "WaveRefractionCalcInitialize() failed." << std::endl;
+    }
+	
     // Connect signal functions.
     /**
      * @brief: Connect result output signals.
@@ -103,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Dispersion Equation Calculator.
     connect(ui.DE_Calc, &QPushButton::clicked, this, &MainWindow::runDispersionEquationCalculator);
     connect(ui.ECWE_Calc, &QPushButton::clicked, this, &MainWindow::runEllipticCosineWaveErgodicCalculator);
-
+    connect(ui.WR_Calc, &QPushButton::clicked, this, &MainWindow::runWaveRefractionCalculator);
 }
 
 MainWindow::~MainWindow()
@@ -115,7 +131,7 @@ bool MainWindow::tryParseDouble(QLineEdit* LineEdit, double &Value)
 {
     using namespace std;
     try {
-        string str = LineEdit->text().toStdString();
+        std::string str = LineEdit->text().toStdString();
         Value = stod(str);
         return true;
     }
@@ -129,7 +145,7 @@ bool MainWindow::tryParseInt(QLineEdit* LineEdit, int& Value)
 {
     using namespace std;
     try {
-        string str = LineEdit->text().toStdString();
+        std::string str = LineEdit->text().toStdString();
         Value = stoi(str);
         return true;
     }
@@ -318,6 +334,17 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
 
             return 0;
         }, period, depth, waveHeight, ergodicAccuracy
+    ).detach();
+}
+
+void h13::MainWindow::runWaveRefractionCalculator()
+{
+    // Create calculate thread.
+    std::thread(
+        [this](void) -> int
+        {
+            return 0;
+        }
     ).detach();
 }
 
