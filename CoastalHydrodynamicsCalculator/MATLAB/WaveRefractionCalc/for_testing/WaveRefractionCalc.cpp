@@ -1,6 +1,6 @@
 //
-// MATLAB Compiler: 8.2 (R2021a)
-// Date: Sun May  8 00:04:20 2022
+// MATLAB Compiler: 7.1 (R2019b)
+// Date: Sun May  8 17:39:24 2022
 // Arguments:
 // "-B""macro_default""-W""cpplib:WaveRefractionCalc,all,version=1.0""-T""link:l
 // ib""-d""C:\Users\h13\Desktop\CoastalHydrodynamicsCalculator\CoastalHydrodynam
@@ -154,12 +154,14 @@ bool MW_CALL_CONV mlxWaveRefractionDiffFunction(int nlhs, mxArray *plhs[], int n
 }
 
 LIB_WaveRefractionCalc_CPP_API 
-void MW_CALL_CONV WaveRefractionCalc(int nargout, mwArray& result, const mwArray& 
-                                     incident_angle, const mwArray& depth, const mwArray& 
-                                     radius, const mwArray& tolerance, const mwArray& 
-                                     cycleTime)
+void MW_CALL_CONV WaveRefractionCalc(int nargout, mwArray& boundary_x, mwArray& 
+                                     boundary_y, mwArray& boundary_angle, mwArray& 
+                                     internal_x, mwArray& internal_y, mwArray& 
+                                     internal_angle, const mwArray& incident_angle, const 
+                                     mwArray& depth, const mwArray& radius, const 
+                                     mwArray& tolerance, const mwArray& period)
 {
-    mclcppMlfFeval(_mcr_inst, "WaveRefractionCalc", nargout, 1, 5, &result, &incident_angle, &depth, &radius, &tolerance, &cycleTime);
+    mclcppMlfFeval(_mcr_inst, "WaveRefractionCalc", nargout, 6, 5, &boundary_x, &boundary_y, &boundary_angle, &internal_x, &internal_y, &internal_angle, &incident_angle, &depth, &radius, &tolerance, &period);
 }
 
 LIB_WaveRefractionCalc_CPP_API 

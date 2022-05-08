@@ -5,7 +5,9 @@
 #include <thread>
 #include <math.h>
 #include <string>
+#include <sstream>
 #include <iostream>
+#include <iomanip>
 
 // Dispersion Equation Wavelength Calculator.
 #include "DispersionEquationWavelengthCalculator.hpp"
@@ -16,12 +18,7 @@
 #include "WaveRefractionCalc.h"
 
 using namespace h13;
-/*
-#pragma comment(lib, "mclmcrrt.lib")
-#pragma comment(lib, "libmx.lib")
-#pragma comment(lib, "libmat.lib")
-#pragma comment(lib, "mclmcr.lib")
-*/
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -31,21 +28,14 @@ MainWindow::MainWindow(QWidget *parent)
     //ui.WaveView->setChart(&chart);
     
     ui.WaveView->setRenderHint(QPainter::Antialiasing);
-
-    // Init wave refraction calculator.
-    bool ret = WaveRefractionCalcInitialize();
-    if (ret)
-    {
-		std::cout << "WaveRefractionCalcInitialize() success." << std::endl;
-    }
-    else {
-		std::cout << "WaveRefractionCalcInitialize() failed." << std::endl;
-    }
 	
     // Connect signal functions.
     /**
      * @brief: Connect result output signals.
      */
+    // log.
+    connect(this, &MainWindow::log, this, &MainWindow::logAppendMethod, Qt::AutoConnection);
+    
     // MainWindow::SetDispersionEquationCalculatorResult
     connect(this, &MainWindow::SetDispersionEquationCalculatorResult, this, 
         [this](double Result) { ui.DE_Output -> setText(QString::number(Result)); }
@@ -93,7 +83,15 @@ MainWindow::MainWindow(QWidget *parent)
                 }
             }
 
-            series->setName(QString::fromStdString(Series.Name));
+            if (Series.Name.size() > 0)
+            {
+                series->setName(QString::fromStdString(Series.Name));
+            }
+
+            if (Series.Color != nullptr)
+            {
+                series->setColor(*(Series.Color));
+            }
             seriesList.push_back(series);
             chart.addSeries(series);
             ui.WaveView->setChart(&chart);
@@ -120,6 +118,28 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui.DE_Calc, &QPushButton::clicked, this, &MainWindow::runDispersionEquationCalculator);
     connect(ui.ECWE_Calc, &QPushButton::clicked, this, &MainWindow::runEllipticCosineWaveErgodicCalculator);
     connect(ui.WR_Calc, &QPushButton::clicked, this, &MainWindow::runWaveRefractionCalculator);
+    
+    // Output author information.
+    log(Info, "Author: h13.");
+    log(Info, "Student number: 631902090521.");
+    log(Info, R"(Project repository: https://github.com/h13-0/CoastalHydrodynamicsCalculator)");
+
+    // Create a new thread to continue initialization.
+    log(Info, "Initing Wave Refraction Calculator ...");
+    std::thread(
+        [this](void) -> void
+        {
+            // Init wave refraction calculator.
+            bool ret = WaveRefractionCalcInitialize();
+            if (ret)
+            {
+                log(Info, "WaveRefractionCalcInitialize() successed.");
+            }
+            else {
+                log(Fatal, "WaveRefractionCalcInitialize() failed.");
+            }
+        }
+    ).detach();
 }
 
 MainWindow::~MainWindow()
@@ -137,6 +157,7 @@ bool MainWindow::tryParseDouble(QLineEdit* LineEdit, double &Value)
     }
     catch (...)
     {
+        log(Warning, "Unable to convert the current parameter to double, please check the parameter!");
         return false;
     }
 }
@@ -151,6 +172,7 @@ bool MainWindow::tryParseInt(QLineEdit* LineEdit, int& Value)
     }
     catch (...)
     {
+        log(Warning, "Unable to convert the current parameter to int, please check the parameter!");
         return false;
     }
 }
@@ -201,6 +223,7 @@ void MainWindow::runDispersionEquationCalculator()
     std::thread(
         [this](double Period, double Depth, double InitialWavelength, double IterationAccuracy, int MaximumIterations) -> int
         {
+            log(Info, "Dispersion Equation Calculator begins to calculate.");
             int iterations = 0;
             
             double waveLength = InitialWavelength;
@@ -226,11 +249,15 @@ void MainWindow::runDispersionEquationCalculator()
                 iterations ++;
             };
 
+            log(Info, "Dispersion Equation Calculator starts drawing.");
+
             // Output data.
             SetDispersionEquationCalculatorResult(waveLength);
             ClearChart();
             SetChartTitle("弥散方程求波长");
             AddSeriesToChart(series);
+
+            log(Info, "Dispersion Equation Calculator ends the calculation.");
 
             return 0;
         }, cycle, depth, initialWaveLength, iterationAccuracy, maximumIterations
@@ -272,6 +299,7 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
     std::thread(
         [this](double Period, double Depth, double WaveHeight, double ErgodicAccuracy) -> int
         {
+            log(Info, "Elliptic Cosine Wave Ergodic Calculator begins to calculate.");
             // Create series.
             ChartSeries K_kappaSeries;
             K_kappaSeries.Name = "K(κ)";
@@ -322,6 +350,8 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
             // Calculate wavelength.
             resultWaveLength = sqrt((16 * pow(Depth, 3) ) / (3 * WaveHeight)) * resultKappa * resultK_kappa;
 
+            log(Info, "Elliptic Cosine Wave Ergodic Calculator starts drawing.");
+
             // Output data.
             SetEllipticCosineWaveErgodicCalculatorKappaResult(resultKappa);
             SetEllipticCosineWaveErgodicCalculatorWaveLengthResult(resultWaveLength);
@@ -332,6 +362,8 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
             AddSeriesToChart(E_kappaSeries);
             AddSeriesToChart(cycleTimeSeries);
 
+            log(Info, "Elliptic Cosine Wave Ergodic Calculator ends the calculation.");
+
             return 0;
         }, period, depth, waveHeight, ergodicAccuracy
     ).detach();
@@ -339,12 +371,156 @@ void h13::MainWindow::runEllipticCosineWaveErgodicCalculator()
 
 void h13::MainWindow::runWaveRefractionCalculator()
 {
+    // Get Values from QTextEdit.
+    // incidentAngle
+    double incidentAngle = 0.0;
+    if (!tryParseDouble(ui.WR_IncidentAngle, incidentAngle))
+    {
+        return;
+    }
+
+    // depth.
+    double depth = 0.0;
+    if (!tryParseDouble(ui.WR_Depth, depth))
+    {
+        return;
+    }
+
+    // radius.
+    double radius = 0.0;
+    if (!tryParseDouble(ui.WR_Radius, radius))
+    {
+        return;
+    }
+
+    // tolerance.
+    double tolerance = 0.0;
+    if (!tryParseDouble(ui.WR_Tolerance, tolerance))
+    {
+        return;
+    }
+
+    // period.
+    double period = 0.0;
+    if (!tryParseDouble(ui.WR_Period, period))
+    {
+        return;
+    }
+
     // Create calculate thread.
     std::thread(
-        [this](void) -> int
+        [this](double IncidentAngle, double Depth, double Radius, double Tolerance, double Period) -> int
         {
+            log(Info, "Wave Refraction Calculator begins to calculate.");
+            mxArray* incidentAngle = mxCreateDoubleScalar(IncidentAngle);
+            mxArray* depth         = mxCreateDoubleScalar(Depth);
+            mxArray* radius        = mxCreateDoubleScalar(Radius);
+            mxArray* tolerance     = mxCreateDoubleScalar(Tolerance);
+            mxArray* period     = mxCreateDoubleScalar(Period);
+            mxArray* params[] = { incidentAngle, depth, radius, tolerance, period };
+            
+            mxArray* boundary_x     = mxCreateDoubleScalar(0);
+            mxArray* boundary_y     = mxCreateDoubleScalar(0);
+            mxArray* boundary_angle = mxCreateDoubleScalar(0);
+            mxArray* internal_x     = mxCreateDoubleScalar(0);
+            mxArray* internal_y     = mxCreateDoubleScalar(0);
+            mxArray* internal_angle = mxCreateDoubleScalar(0);
+            mxArray* results[] = { boundary_x, boundary_y, boundary_angle, 
+                internal_x, internal_y, internal_angle };
+
+            bool ret = mlxWaveRefractionCalc(6, results, 5, params);
+
+            log(Info, "Wave Refraction Calculator starts drawing.");
+
+            if (ret)
+            {
+                int boundaryPoints = mxGetN(results[0]);
+                int internalPoints = mxGetN(results[3]);
+
+                double* boundaryX_ptr = mxGetPr(results[0]);
+                double* boundaryY_ptr = mxGetPr(results[1]);
+                double* boundaryAngle_ptr = mxGetPr(results[2]);
+                
+                double* internalX_ptr = mxGetPr(results[3]);
+                double* internalY_ptr = mxGetPr(results[4]);
+                double* internalAngle_ptr = mxGetPr(results[5]);
+
+                ClearChart();
+                SetChartTitle("圆锥底坡波浪折射计算");
+
+                // Add boundary points.
+                for (int i = 0; i < boundaryPoints; i++)
+                {
+                    ChartSeries boundarySeries;
+                    boundarySeries.Points.push_back(Points(*(boundaryX_ptr + i), *(boundaryY_ptr + i)));
+                    boundarySeries.Points.push_back(Points(*(boundaryX_ptr + i) + sin(*(boundaryAngle_ptr + i)) * Radius * 0.15, *(boundaryY_ptr + i) + cos(*(boundaryAngle_ptr + i)) * Radius * 0.15));
+                    QColor* boundaryColor = new QColor(255, 0, 0);
+                    boundarySeries.Color = boundaryColor;
+                    AddSeriesToChart(boundarySeries);
+                }
+
+                // Add internal points.
+                for (int i = 0; i < internalPoints; i++)
+                {
+                    ChartSeries internalSeries;
+                    internalSeries.Points.push_back(Points(*(internalX_ptr + i), *(internalY_ptr + i)));
+                    internalSeries.Points.push_back(Points(*(internalX_ptr + i) + sin(*(internalAngle_ptr + i)) * Radius * 0.15, *(internalY_ptr + i) + cos(*(internalAngle_ptr + i)) * Radius * 0.15));
+                    QColor* internalColor = new QColor(0, 0, 255);
+                    internalSeries.Color = internalColor;
+                    AddSeriesToChart(internalSeries);
+                }
+            }
+            else {
+                log(Info, "Wave Refraction Calculator: The current parameter has no solution.");
+            }
+
+            // Release variables.
+            for (auto result : results)
+            {
+                mxDestroyArray(result);
+            }
+            for (auto param : params)
+            {
+                mxDestroyArray(param);
+            }
+
+            log(Info, "Wave Refraction Calculator ends the calculation.");
+
             return 0;
-        }
+        }, incidentAngle, depth, radius, tolerance, period
     ).detach();
+}
+
+void h13::MainWindow::logAppendMethod(logLevel level, std::string log)
+{
+    auto timeStamp = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::stringstream stringStream;
+    stringStream << std::put_time(std::localtime(&timeStamp), "[%H:%M:%S]");
+    QString Qlog;
+
+    switch (level)
+    {
+    case logLevel::Fatal:
+        Qlog = QString("<font color=\"#990000\">%1").arg(QString::fromStdString(stringStream.str() + ": " + "[Fatal]: " + log));
+        break;
+    case logLevel::Error:
+        Qlog = QString("<font color=\"#ff3300\">%1").arg(QString::fromStdString(stringStream.str() + ": " + "[Error]: " + log));
+        break;
+    case logLevel::Warning:
+        Qlog = QString("<font color=\"#FF0000\">%1").arg(QString::fromStdString(stringStream.str() + ": " + "[Warning]: " + log));
+        break;
+    case logLevel::Info:
+        Qlog = QString("<font color=\"#000000\">%1").arg(QString::fromStdString(stringStream.str() + ": " + "[Info]: " + log));
+        break;
+    case logLevel::Debug:
+        Qlog = QString("<font color=\"#000000\">%1").arg(QString::fromStdString(stringStream.str() + ": " + "[Debug]: " + log));
+        break;
+    default:
+        break;
+    }
+
+    if (!Qlog.isEmpty()) {
+        ui.log->append(Qlog);
+    }
 }
 

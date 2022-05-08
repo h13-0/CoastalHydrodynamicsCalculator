@@ -2,7 +2,7 @@
   "configurations": [
     {
       "name": "x64-Debug",
-      "generator": "Ninja",
+      "generator": "Ninja", 
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\out\\build\\${name}",
@@ -14,14 +14,13 @@
     {
       "name": "x64-Release",
       "generator": "Ninja",
-      "configurationType": "RelWithDebInfo",
+      "configurationType": "Relase",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "variables": []
+      "inheritEnvironments": [ "msvc_x64_x64" ]
     }
   ]
 }

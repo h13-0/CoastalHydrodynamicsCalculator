@@ -9,6 +9,15 @@
 
 namespace h13
 {
+    enum logLevel
+    {
+        Fatal,
+        Error,
+        Warning,
+        Info,
+        Debug
+    };
+
     /// <summary>
     /// @brief: typedef struct of series.
     /// @param
@@ -24,11 +33,14 @@ namespace h13
 
     typedef struct ChartSeries
     {
-        ChartSeries() {};
-        ChartSeries(std::string Name, std::vector<Points_t> Points)
-            :Name(Name), Points(Points){ };
+        ChartSeries() {
+            Color = nullptr;
+        };
+        ChartSeries(std::string Name, std::vector<Points_t> Points, QColor* Color = nullptr)
+            :Name(Name), Points(Points), Color(Color){ };
         std::string Name;
         std::vector<Points_t> Points;
+        QColor* Color;
     } ChartSeries_t;
 
     class MainWindow : public QMainWindow
@@ -70,6 +82,13 @@ namespace h13
 
         void SetEllipticCosineWaveErgodicCalculatorWaveLengthResult(double Result);
 
+        /// <summary>
+        /// Add log to ui.
+        /// </summary>
+        /// <param name="level">log level.</param>
+        /// <param name="log">message</param>
+        void log(logLevel level, std::string message);
+
     private:
         bool tryParseDouble(QLineEdit* LineEdit, double &Value);
         bool tryParseInt(QLineEdit* LineEdit, int &Value);
@@ -96,6 +115,13 @@ namespace h13
         /// Run the wave refraction calculator.
         /// </summary>
         void runWaveRefractionCalculator();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="log"></param>
+        void logAppendMethod(logLevel level, std::string log);
 
     };
 } // namespace h13

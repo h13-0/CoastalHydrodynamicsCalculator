@@ -1,21 +1,31 @@
-function result = WaveRefractionCalc(incident_angle, depth, radius, tolerance, cycleTime)
+% Params: 参数
+% incident_angle % 入射角
+% depth          % 水深
+% radius         % 椭圆半径
+% tolerance      % 计算间距
+% period         % 周期
+
+% return: 返回值
+% boundary_x     % 边界点x列表
+% boundary_y     % 边界点y列表
+% boundary_angle % 边界点偏角
+% internal_x     % 内部点x列表
+% internal_y     % 内部点y列表
+% internal_angle % 内部点偏角
+function [boundary_x, boundary_y, boundary_angle, ...
+    internal_x, internal_y, internal_angle] = WaveRefractionCalc(incident_angle, depth, radius, tolerance, period)
 	% 定义全局变量方便传参到fsolve
 	global incident_angle k all_points boundary_points Nx Ny dkdx dkdy
 
 	% Params: 参数
-	incident_angle = 0;    % 入射角
-	depth          = 20;   % 水深
-	radius         = 2000; % 椭圆半径
-	tol            = 150;  % 计算间距
-	cycleTime      = 10;   % 周期
 	g              = 9.8;  % 重力加速度
 
 	% Step1: 找到计算区域内所有内部点
 	internal_x = [];
 	internal_y = [];
-	for x0 = - radius : tol : radius
+	for x0 = - radius : tolerance : radius
 		if x0 ~= 0
-			for y0 = - radius : tol : 0
+			for y0 = - radius : tolerance : 0
 				if (x0^2 + y0^2 < radius^2)
 				   internal_x = [internal_x x0];
 				   internal_y = [internal_y y0];
@@ -29,17 +39,17 @@ function result = WaveRefractionCalc(incident_angle, depth, radius, tolerance, c
 	boundary_x = [];
 	boundary_y = [];
 	% 等间距添加x轴边界点
-	for x0 = - radius : tol : radius
+	for x0 = - radius : tolerance : radius
 		boundary_x = [boundary_x x0];
 		boundary_y = [boundary_y -sqrt(radius^2 - x0^2)];
 	end
 	% 等间距添加y轴边界
-	for y0 = - radius : tol : 0
+	for y0 = - radius : tolerance : 0
 		boundary_y = [boundary_y y0 y0];
 		boundary_x = [boundary_x -sqrt(radius^2 - y0^2) sqrt(radius^2 - y0^2)];
 	end
 	% 等间距添加中心边界
-	for y0 = - radius : tol : 0
+	for y0 = - radius : tolerance : 0
 		boundary_y = [boundary_y y0];
 		boundary_x = [boundary_x 0];
 	end
@@ -53,9 +63,9 @@ function result = WaveRefractionCalc(incident_angle, depth, radius, tolerance, c
 	internal_depth = sqrt(internal_x.^2 + internal_y.^2) * depth / radius;
 	all_depth = [boundary_depth internal_depth];
 	all_wave_length = zeros(1, all_points);
-	inital_wave_length = 9.8 * cycleTime^2 / 2 / pi;
+	inital_wave_length = 9.8 * period^2 / 2 / pi;
 	for i = 1 : 1 : all_points
-	   f=@(L)L-g.*cycleTime.^2/2/pi*tanh(2*pi*all_depth(i)/L);
+	   f=@(L)L-g.*period.^2/2/pi*tanh(2*pi*all_depth(i)/L);
 	   all_wave_length(i)=fzero(f, inital_wave_length);
 	end
 	k = 2 * pi ./ all_wave_length;
@@ -63,7 +73,7 @@ function result = WaveRefractionCalc(incident_angle, depth, radius, tolerance, c
 	% Step4: 求k对x和k对y的偏微分
 	% dL / dh
 	%dLdh = (1 ./ 2) * cycleTime * sqrt(g ./ all_depth);
-	dLdh = (9.8 * cycleTime^2./all_wave_length.*(sech(k.*all_depth)).^2)./(1+9.8*cycleTime^2*(sech(k.*all_depth)).^2.*all_depth./all_wave_length.^2);
+	dLdh = (9.8 * period^2./all_wave_length.*(sech(k.*all_depth)).^2)./(1+9.8*period^2*(sech(k.*all_depth)).^2.*all_depth./all_wave_length.^2);
 	% dh / dx
 	dhdx = (all_x .* depth) ./ (radius .* sqrt(all_x.^2 + all_y.^2));
 	% dk / dx
@@ -174,9 +184,7 @@ function result = WaveRefractionCalc(incident_angle, depth, radius, tolerance, c
 	alpha = fsolve(@WaveRefractionDiffFunction, alpha, options);
 	alpha = alpha(1, 1 : all_points);
 	
-	% 打包result
-	result(1, :) = all_x;
-	result(2, :) = all_y;
-	result(3, :) = alpha;
-	
+	% 准备返回值
+    boundary_angle = alpha(1 : boundary_points);
+    internal_angle = alpha(boundary_points + 1 : all_points);
 end
