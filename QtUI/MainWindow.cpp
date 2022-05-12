@@ -448,6 +448,10 @@ void h13::MainWindow::runWaveRefractionCalculator()
                 ClearChart();
                 SetChartTitle("圆锥底坡波浪折射计算");
 
+                // Output results.
+                ui.WR_InternalPoints->setText(QString::number(internalPoints));
+                ui.WR_BoundaryPoints->setText(QString::number(boundaryPoints));
+
                 // Add boundary points.
                 for (int i = 0; i < boundaryPoints; i++)
                 {
